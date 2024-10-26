@@ -2,17 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import * as cheerio from 'cheerio';
 import unirest from 'unirest';
-import path from 'path';
 
 const app = express();
 const port = 5500;
-
-const buildPath = path.join(__dirname, 'build');
-app.use(express.static(buildPath));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
-});
 
 app.use(cors());
 app.use(express.json());
