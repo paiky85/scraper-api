@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import * as cheerio from 'cheerio';
 import unirest from 'unirest';
+import { selectRandom } from './userAgent.js';
 
 const app = express();
 const port = 3000;
@@ -16,7 +17,7 @@ app.post('/', async (req, res) => {
     'User-Agent':
       'Mozilla/5.0 (Windows NT 6.3; Win64; x64)   AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36 Viewer/96.9.4688.89',
   };
-
+  console.log(selectRandom());
   unirest
     .get(url)
     .headers(headers) //response.body
