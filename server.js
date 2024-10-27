@@ -4,13 +4,13 @@ import * as cheerio from 'cheerio';
 import unirest from 'unirest';
 
 const app = express();
-const port = 5500;
+const port = 3000;
 
 app.use(cors());
 app.use(express.json());
 
 app.post('/', async (req, res) => {
-  const keyword = req.body.keyword.split(' ').join('+');
+  const keyword = req.body.keyword.split(' ').join('+'); // Convert user input to search keyword
   const url = `https://www.google.com/search?hl=en&q=${keyword}`;
   const headers = {
     'User-Agent':
@@ -19,14 +19,14 @@ app.post('/', async (req, res) => {
 
   unirest
     .get(url)
-    .headers(headers)
+    .headers(headers) //response.body
     .then(({ body }) => {
-      const $ = cheerio.load(body);
+      const $ = cheerio.load(body); // load method to parse an HTML ==> return Cheerio object
 
       const results = $('.g ')
         .map((_, result) => {
           const $result = $(result);
-          const title = $result.find('.yuRUbf').find('h3').text();
+          const title = $result.find('.yuRUbf').find('h3').text(); // find specific element
           const link = $result.find('.yuRUbf').find('a').attr('href');
           const snippet = $result.find('.VwiC3b').text();
           const displayedLink = $result.find('.yuRUbf .NJjxre .tjvcx').text();
@@ -40,7 +40,7 @@ app.post('/', async (req, res) => {
           }
         })
         .toArray();
-      // console.log(results);
+
       res.json(results);
     });
 });
