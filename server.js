@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.post('/', async (req, res) => {
   const keyword = req.body.keyword.split(' ').join('+'); // Convert user input to search keyword
-  const url = `https://www.google.com/search?hl=en&q=${keyword}`;
+  const url = `https://www.google.com/search?gl=cz&hl=cs&q=${keyword}`;
   const headers = {
     'User-Agent':
       'Mozilla/5.0 (Windows NT 6.3; Win64; x64)   AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36 Viewer/96.9.4688.89',
