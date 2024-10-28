@@ -1,8 +1,9 @@
-import express from 'express';
+import express, { response } from 'express';
 import cors from 'cors';
 import * as cheerio from 'cheerio';
 import unirest from 'unirest';
 import { selectRandom } from './userAgent.js';
+import utf8 from 'utf8';
 
 const app = express();
 const port = 3000;
@@ -12,11 +13,12 @@ app.use(express.json());
 
 app.post('/', async (req, res) => {
   const keyword = req.body.keyword.trim().split(' ').join('+'); // Convert user input to search keyword
-  const url = `https://www.google.com/search?gl=cz&hl=cs&q=${keyword}`;
+  const encodedURL = encodeURIComponent(keyword);
+  const url = `https://www.google.com/search?gl=cz&hl=cs&q=${encodedURL}`;
 
-  let user_agent = selectRandom(); // import from userAgent.js for selecting random user-agent
+  let userAgent = selectRandom(); // import from userAgent.js for selecting random user-agent
   let headers = {
-    'User-Agent': user_agent,
+    'User-Agent': userAgent,
   };
 
   unirest
@@ -51,3 +53,37 @@ app.post('/', async (req, res) => {
 });
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));
+
+/*
+  unirest
+    .get(url)
+    .headers(headers) //response.body
+    .then(({ body }) => {
+      console.log(response.bod);
+      const $ = cheerio.load(body); // load method to parse an HTML ==> return Cheerio object
+
+      const results = $('.g ')
+        .map((_, result) => {
+          const $result = $(result);
+          const title = $result.find('.yuRUbf').find('h3').text(); // find specific element
+          const link = $result.find('.yuRUbf').find('a').attr('href');
+          const snippet = $result.find('.VwiC3b').text();
+          const displayedLink = $result.find('.yuRUbf .NJjxre .tjvcx').text();
+          if (link !== undefined) {
+            return {
+              title: title,
+              link: link,
+              snippet: snippet,
+              displayedLink: displayedLink,
+            };
+          }
+        })
+        .toArray();
+
+      res.json(results);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+*/
