@@ -3,7 +3,6 @@ import cors from 'cors';
 import * as cheerio from 'cheerio';
 import unirest from 'unirest';
 import { selectRandomUserAgent } from './userAgent.js';
-import utf8 from 'utf8';
 
 const app = express();
 const port = 3000;
