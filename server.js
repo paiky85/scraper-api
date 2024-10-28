@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/', async (req, res) => {
-  const keyword = req.body.keyword.split(' ').join('+'); // Convert user input to search keyword
+  const keyword = req.body.keyword.trim().split(' ').join('+'); // Convert user input to search keyword
   const url = `https://www.google.com/search?gl=cz&hl=cs&q=${keyword}`;
 
   let user_agent = selectRandom(); // import from userAgent.js for selecting random user-agent
