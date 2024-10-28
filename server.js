@@ -14,7 +14,6 @@ app.post('/', async (req, res) => {
   const keyword = req.body.keyword.trim().split(' ').join('+'); // Convert user input to search keyword
   const encodedURL = encodeURIComponent(keyword);
   const url = `https://www.google.com/search?gl=cz&hl=cs&q=${encodedURL}`;
-  console.log(url);
 
   let userAgent = selectRandomUserAgent(); // import from userAgent.js for selecting random user-agent
   let headers = {
@@ -31,7 +30,9 @@ app.post('/', async (req, res) => {
         .map((_, result) => {
           const $result = $(result);
           const title = $result.find('.yuRUbf').find('h3').text(); // find specific element
-          const link = $result.find('.yuRUbf').find('a').attr('href');
+          const link = decodeURIComponent(
+            $result.find('.yuRUbf').find('a').attr('href')
+          );
           const snippet = $result.find('.VwiC3b').text();
           const displayedLink = $result.find('.yuRUbf .NJjxre .tjvcx').text();
           if (link !== undefined) {
