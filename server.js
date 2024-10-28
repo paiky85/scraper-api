@@ -30,15 +30,13 @@ app.post('/', async (req, res) => {
         .map((_, result) => {
           const $result = $(result);
           const title = $result.find('.yuRUbf').find('h3').text(); // find specific element
-          const link = decodeURIComponent(
-            $result.find('.yuRUbf').find('a').attr('href')
-          );
+          const link = $result.find('.yuRUbf').find('a').attr('href');
           const snippet = $result.find('.VwiC3b').text();
           const displayedLink = $result.find('.yuRUbf .NJjxre .tjvcx').text();
           if (link !== undefined) {
             return {
               title: title,
-              link: link,
+              link: decodeURIComponent(link),
               snippet: snippet,
               displayedLink: displayedLink,
             };
