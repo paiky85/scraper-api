@@ -25,11 +25,9 @@ app.post('/', (req, res) => {
     .get(url)
     .headers(headers) //response.body
     .then(({ body }) => {
-      if (body === undefined) {
-        const error = new Error('Problem with connection! Try it later.');
-        error.code = '503';
-        throw error;
-      }
+      if (body === undefined)
+        throw new Error('Problem with connection! Try it later.');
+
       const $ = cheerio.load(body); // load method to parse an HTML ==> return Cheerio object
       const results = $('.g ')
         .map((_, result) => {
