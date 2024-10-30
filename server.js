@@ -25,8 +25,12 @@ app.post('/', (req, res) => {
     .get(url)
     .headers(headers) //response.body
     .then(({ body }) => {
+      if (body === undefined) {
+        const error = new Error('Problem with connection! Try it later.');
+        error.code = '503';
+        throw error;
+      }
       const $ = cheerio.load(body); // load method to parse an HTML ==> return Cheerio object
-
       const results = $('.g ')
         .map((_, result) => {
           const $result = $(result);
@@ -48,7 +52,8 @@ app.post('/', (req, res) => {
       res.json(results); // response to client
     })
     .catch(error => {
-      console.log(error);
+      res.json({ code: error.code, message: error.message });
+      console.log(error.message);
     });
 });
 
