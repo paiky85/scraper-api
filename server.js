@@ -10,10 +10,11 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.post('/', async (req, res) => {
+app.post('/', (req, res) => {
   const keyword = req.body.keyword.trim().split(' ').join('+'); // Convert user input to search keyword
-  const encodedURL = encodeURIComponent(keyword);
-  const url = `https://www.google.com/search?gl=cz&hl=cs&q=${encodedURL}`;
+  const encodedKeyword = encodeURIComponent(keyword); // encode to utf-8
+  const lang = req.body.lang; // language search
+  const url = `https://www.google.com/search?q=${encodedKeyword}&gl=cz&hl=${lang}`;
 
   let userAgent = selectRandomUserAgent(); // import from userAgent.js for selecting random user-agent
   let headers = {
@@ -38,13 +39,13 @@ app.post('/', async (req, res) => {
               title: title,
               link: decodeURIComponent(link),
               snippet: snippet,
-              displayedLink: displayedLink,
+              displayedLink: displayedLink.split(' ')[0],
             };
           }
         })
         .toArray();
 
-      res.json(results);
+      res.json(results); // response to client
     })
     .catch(error => {
       console.log(error);
